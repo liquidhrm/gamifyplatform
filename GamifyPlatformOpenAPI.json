@@ -1,0 +1,1275 @@
+{
+  "openapi": "3.1.0",
+  "x-stoplight": {
+    "id": "7ptpy9gmg6r8a"
+  },
+  "info": {
+    "title": "Gamify Platform API",
+    "version": "0.1",
+    "summary": "Gamify Platform API definition",
+    "description": "Gamify Platform OpenAPI interface description.\n\n- Game is created/added to the platform manually through the amin web UI by the GamifyPlatform by game developer requests.\n- All game users and items are dinamically created/added by the game developer through this REST interface.\n\n- In order to interact with the API, login is required for a game through a technical user (which is associated to the game) and also for an end user.\n- All subsequent API interactions must send the provided auth-token in the HTTP header, received after succesfull login.\n",
+    "contact": {
+      "email": "gamifyplatform02@gmail.com",
+      "name": "Support Contact",
+      "url": "http://35.187.184.40:8080/contact.html"
+    },
+    "license": {
+      "url": "http://35.187.184.40:8080/license.html",
+      "name": "Gamify Platform License"
+    }
+  },
+  "tags": [
+    {
+      "name": "Game",
+      "description": "Game related endpoints"
+    },
+    {
+      "name": "Item",
+      "description": "Game item related endpoints"
+    },
+    {
+      "name": "User",
+      "description": "User related endpoints"
+    },
+    {
+      "name": "Wallet",
+      "description": "Wallet related endpoints"
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://35.187.184.40:8080"
+    }
+  ],
+  "paths": {
+    "/user/login": {
+      "get": {
+        "summary": "Login user",
+        "description": "Login user by basic auth method.",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing Required Information: HTTP Authorization header"
+          }
+        },
+        "operationId": "get-user-login",
+        "x-stoplight": {
+          "id": "ml6znbshazehd"
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "description": "HTTP header for Basic Authorization. Base64 encoded 'username:password' with 'Basic' prefix, for example: 'Authorization: Basic dGVzdGFkbWluOm19dDIzMUM='",
+            "name": "Authorization"
+          }
+        ]
+      }
+    },
+    "/user/whoami": {
+      "get": {
+        "summary": "Get user info by auth token",
+        "description": "Get authenticated (already logged in) user data by auth-token.",
+        "operationId": "get-user-whoami",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Missing Required Information: HTTP auth-token header"
+          }
+        },
+        "requestBody": {
+          "content": {},
+          "description": ""
+        },
+        "x-stoplight": {
+          "id": "rjbgd4c7m1evk"
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "auth-token",
+            "description": "User auth-token which initiates the current action."
+          }
+        ],
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "summary": "Get User Info by User ID",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {}
+              }
+            }
+          },
+          "404": {
+            "description": "User Not Found"
+          }
+        },
+        "operationId": "get-user-id",
+        "description": "Retrieve the information of the user with the matching user ID.",
+        "x-stoplight": {
+          "id": "f05jtf2xautnr"
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "auth-token",
+            "description": "User auth-token which initiates the current action."
+          }
+        ],
+        "tags": [
+          "User"
+        ]
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "User ID"
+        }
+      ],
+      "patch": {
+        "summary": "Update User Information",
+        "operationId": "patch-user-id",
+        "responses": {
+          "200": {
+            "description": "Updated user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {}
+              }
+            }
+          },
+          "404": {
+            "description": "User Not Found"
+          }
+        },
+        "description": "Update existing user data.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {}
+            }
+          },
+          "description": "User data to be updated."
+        },
+        "x-stoplight": {
+          "id": "il3winzwqj1nk"
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "description": "User auth-token which initiates the current action.",
+            "name": "auth-token"
+          }
+        ],
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/user": {
+      "post": {
+        "summary": "Create New User",
+        "operationId": "post-user",
+        "responses": {
+          "200": {
+            "description": "Created user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Missing Required Information"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {}
+            }
+          },
+          "description": "User data to be created"
+        },
+        "description": "Create a new user.",
+        "x-stoplight": {
+          "id": "ifsexh1fzpy4p"
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "auth-token",
+            "description": "User auth-token which initiates the current action."
+          }
+        ],
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/user/wallet": {
+      "get": {
+        "summary": "Get wallet information",
+        "tags": [
+          "Wallet"
+        ],
+        "responses": {
+          "200": {
+            "description": "Actual wallet information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Wallet"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-wallet",
+        "x-stoplight": {
+          "id": "99m9xsx2r753a"
+        },
+        "description": "Get wallet information like: free balance, pledged game/item details etc.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "auth-token",
+            "description": "User auth-token which initiates the current action."
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/user/wallet/topup": {
+      "post": {
+        "summary": "Topup money to wallet",
+        "tags": [
+          "Wallet"
+        ],
+        "responses": {
+          "200": {
+            "description": "Actual wallet information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Wallet"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "post-wallet-topup",
+        "x-stoplight": {
+          "id": "r1cj79qonxz4c"
+        },
+        "description": "Topup money from credit card to the wallet, which is added to the wallet's free balance (money deposit)",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "auth-token",
+            "description": "User auth-token which initiates the current action."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/Money"
+              }
+            }
+          },
+          "description": "Money to topup"
+        }
+      },
+      "description": "pénz feltöltés",
+      "parameters": []
+    },
+    "/user/wallet/redeem": {
+      "post": {
+        "summary": "Redeem money from wallet",
+        "tags": [
+          "Wallet"
+        ],
+        "responses": {
+          "200": {
+            "description": "Actual wallet information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Wallet"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "post-wallet-redeem",
+        "x-stoplight": {
+          "id": "wk8zgv0gvc0we"
+        },
+        "description": "Redeem money from the wallet free balance and transfer it to the credit card account (money withdrawal)",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "auth-token",
+            "description": "User auth-token which initiates the current action."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/Money"
+              }
+            }
+          },
+          "description": "Money to redeem"
+        }
+      },
+      "parameters": []
+    },
+    "/user/wallet/reward": {
+      "post": {
+        "summary": "Money transfer to wallet",
+        "tags": [
+          "Wallet"
+        ],
+        "responses": {
+          "200": {
+            "description": "Actual wallet information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Wallet"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "post-wallet-grant",
+        "x-stoplight": {
+          "id": "nw685ic9k535v"
+        },
+        "description": "Money transfer to the wallet by a game, which is added to the wallet's free balance (money reward)",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "auth-token",
+            "description": "User auth-token which initiates the current action."
+          }
+        ],
+        "requestBody": {
+          "description": "Money to reward",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/Money"
+              }
+            }
+          }
+        }
+      },
+      "description": "Pénz jutalom / nyeremény, reward, kamat",
+      "parameters": []
+    },
+    "/game/buy": {
+      "post": {
+        "summary": "Buy a game or subscribtion",
+        "tags": [
+          "Game"
+        ],
+        "responses": {
+          "200": {
+            "description": "Actual wallet information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Wallet"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-game-buy",
+        "x-stoplight": {
+          "id": "25554ai63e8n1"
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "auth-token",
+            "description": "User auth-token which initiates the current action."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/GameBuy"
+              }
+            }
+          },
+          "description": ""
+        },
+        "description": "Buy a game or subscribtion. Wallet free account will be charged. Not reversable transaction, money will be spent. "
+      }
+    },
+    "/game/pledge": {
+      "post": {
+        "summary": "Buy or subscribe a game for a specific period of time",
+        "tags": [
+          "Game"
+        ],
+        "responses": {
+          "200": {
+            "description": "Actual wallet information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Wallet"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-game-pledge",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "auth-token",
+            "description": "User auth-token which initiates the current action."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/GameBuy"
+              }
+            }
+          },
+          "description": ""
+        },
+        "x-stoplight": {
+          "id": "1t11pks61aso8"
+        },
+        "description": "Buy or subscribe to a game for a specific period of time. Will be reserved from the wallet free account. Money will be freed again (and will be available) after the period is ended."
+      },
+      "parameters": []
+    },
+    "/game/release/{id}": {
+      "get": {
+        "summary": "Release an earlier pledged game",
+        "tags": [
+          "Game"
+        ],
+        "responses": {
+          "200": {
+            "description": "Actual wallet information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Wallet"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-game-release",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "auth-token",
+            "description": "User auth-token which initiates the current action."
+          }
+        ],
+        "requestBody": {
+          "content": {},
+          "description": ""
+        },
+        "description": "Break or release an earlier pledged game, before the pledge period is ended. Game's pledged amount will be freed up and transfered to the wallet free balance.",
+        "x-stoplight": {
+          "id": "3mfjb8odo4lfb"
+        }
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "Game ID"
+        }
+      ]
+    },
+    "/game/items": {
+      "get": {
+        "summary": "Query game items",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Item",
+                    "x-stoplight": {
+                      "id": "en8agtdld95mh"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-game-items",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "auth-token",
+            "description": "User auth-token which initiates the current action."
+          },
+          {
+            "schema": {
+              "type": "boolean"
+            },
+            "in": "query",
+            "name": "isOwned",
+            "description": "If false than query items which are available to buy or pledge. In case of true, the query provides the user's bought or pledget items."
+          }
+        ],
+        "requestBody": {
+          "content": {},
+          "description": ""
+        },
+        "description": "List of available or earlier buyed or pledged user's game items. See query params for filtering.",
+        "tags": [
+          "Item"
+        ],
+        "x-stoplight": {
+          "id": "li3bux04oq1t6"
+        }
+      },
+      "parameters": []
+    },
+    "/game/item": {
+      "post": {
+        "summary": "Create game items",
+        "responses": {
+          "200": {
+            "description": "Created item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Item"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "post-game-item",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "auth-token",
+            "description": "User auth-token which initiates the current action."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/Item"
+              }
+            }
+          },
+          "description": "Item data to be created"
+        },
+        "description": "Create/upload available items for a game which can be buyed or pledged later.",
+        "x-stoplight": {
+          "id": "i38hwrttejlxc"
+        },
+        "tags": [
+          "Item"
+        ]
+      },
+      "parameters": []
+    },
+    "/game/item/buy": {
+      "post": {
+        "description": "Buy an available item.",
+        "summary": "Buy a game item",
+        "x-stoplight": {
+          "id": "rkpggc6bh4bru"
+        },
+        "operationId": "get-game-items-buy",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "auth-token",
+            "description": "User auth-token which initiates the current action."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Actual wallet information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Wallet"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Item"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/ItemBuy"
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "/game/item/pledge": {
+      "post": {
+        "description": "Buy or subscribe an available item for a certain period of time.",
+        "summary": "Pledge a game item",
+        "operationId": "get-game-items-pledge",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "auth-token",
+            "description": "User auth-token which initiates the current action."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Actual wallet information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Wallet"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Item"
+        ],
+        "x-stoplight": {
+          "id": "rf1qcmgdm1fd4"
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/ItemBuy"
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "/game/item/release/{id}": {
+      "get": {
+        "description": "Break or release an earlier pledged item, before the pledge period is ended. Items's pledged amount will be freed up and transfered to the wallet free balance.",
+        "summary": "Release a pledged game item",
+        "operationId": "get-game-items-release",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "auth-token",
+            "description": "User auth-token which initiates the current action."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Actual wallet information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Wallet"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Item"
+        ],
+        "x-stoplight": {
+          "id": "rf1qcmgdm1fd4"
+        }
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "Game item ID"
+        }
+      ]
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "title": "User",
+        "type": "object",
+        "examples": [
+          {
+            "id": 142,
+            "firstName": "Alice",
+            "lastName": "Smith",
+            "email": "alice.smith@gmail.com",
+            "dateOfBirth": "1997-10-31",
+            "emailVerified": true,
+            "signUpDate": "2019-08-24"
+          }
+        ],
+        "x-stoplight": {
+          "id": "fctrq23zbv0q3"
+        },
+        "required": [
+          "id",
+          "firstName",
+          "lastName",
+          "email",
+          "emailVerified",
+          "created"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the given user."
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "emailVerified": {
+            "type": "boolean",
+            "description": "Set to true if the user's email has been verified."
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date that the user was created.",
+            "x-stoplight": {
+              "id": "zkjhb7ntzqaxy"
+            }
+          },
+          "updated": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "kg190fza4esuv"
+            },
+            "format": "date-time"
+          },
+          "lastLogin": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "4ekxzya9pfi7c"
+            },
+            "format": "date-time"
+          },
+          "authToken": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "nsp55z85ng2en"
+            },
+            "description": "Generated authorization token. Also used in HTTP header to identify user for the given REST action."
+          },
+          "roles": {
+            "type": "array",
+            "x-stoplight": {
+              "id": "3976sdp3pmsab"
+            },
+            "description": "Auth roles like: admin, user etc.",
+            "items": {
+              "x-stoplight": {
+                "id": "j2hpdgco792x6"
+              },
+              "type": "string"
+            }
+          },
+          "blocked": {
+            "type": "boolean",
+            "x-stoplight": {
+              "id": "mvfqsit3og3bl"
+            },
+            "description": "true if user login is blocked"
+          }
+        }
+      },
+      "Wallet": {
+        "title": "Wallet",
+        "x-stoplight": {
+          "id": "3afobswj5d877"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "5095qtfl4rtee"
+            }
+          },
+          "freeBalance": {
+            "$ref": "#/components/schemas/Money",
+            "x-stoplight": {
+              "id": "nzeok5xo22qdd"
+            }
+          },
+          "pledgedGames": {
+            "x-stoplight": {
+              "id": "b4c2echxfd3kr"
+            },
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Game",
+              "x-stoplight": {
+                "id": "r99wyxaz237ft"
+              }
+            }
+          },
+          "pledgedItems": {
+            "type": "array",
+            "x-stoplight": {
+              "id": "glhrob8lu28jk"
+            },
+            "items": {
+              "$ref": "#/components/schemas/Item",
+              "x-stoplight": {
+                "id": "vp0c7fmi8fflf"
+              }
+            }
+          }
+        }
+      },
+      "Money": {
+        "title": "Money",
+        "x-stoplight": {
+          "id": "zn4qz0eb4wfvx"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "ifzf4hz3lj866"
+            }
+          },
+          "amount": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "kjq4l632o0fr3"
+            }
+          },
+          "currency": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "lcn6h1zdcj12f"
+            }
+          }
+        }
+      },
+      "Game": {
+        "title": "Game",
+        "x-stoplight": {
+          "id": "xwds5jnndqnxi"
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "e3pvt1pyz2mex"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "hy3it6nea7j0y"
+            }
+          },
+          "description": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "zi8snbwcfigm9"
+            }
+          },
+          "metaData": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "6475l7xrlmr3j"
+            }
+          }
+        }
+      },
+      "GameBuy": {
+        "title": "BuyGame",
+        "x-stoplight": {
+          "id": "efmxvrlepfnah"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "gameId": {
+            "type": "string"
+          },
+          "targetUserId": {
+            "type": "string"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Item": {
+        "title": "Item",
+        "x-stoplight": {
+          "id": "8ayjlglus3fcb"
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "gameId",
+          "name",
+          "type",
+          "price"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "mgapj1wyj4fnx"
+            }
+          },
+          "gameId": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "ofyqxxsvqw8qt"
+            },
+            "description": "Game foreign key"
+          },
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "0nqdrjodkjnxl"
+            }
+          },
+          "description": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "vawx0quloybqm"
+            }
+          },
+          "type": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "w8q0g6sxu8za8"
+            },
+            "description": "Object, service, level etc."
+          },
+          "price": {
+            "type": "object",
+            "$ref": "#/components/schemas/Price",
+            "x-stoplight": {
+              "id": "0amxayim1p3o9"
+            }
+          },
+          "metaData": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "qh0wtaf7p35c4"
+            },
+            "description": "JSON"
+          }
+        }
+      },
+      "ItemBuy": {
+        "title": "BuyItem",
+        "x-stoplight": {
+          "id": "ewdfhcoud5idz"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "l6pbdl1sjitns"
+            }
+          },
+          "itemId": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "qsoc196uiqld3"
+            }
+          },
+          "targetUserId": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "uzlx47d1us9rs"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "6jk21rwuljdfg"
+            }
+          },
+          "description": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "iy99h44k27cee"
+            }
+          },
+          "amount": {
+            "$ref": "#/components/schemas/Money",
+            "x-stoplight": {
+              "id": "pjq888maat5l3"
+            }
+          }
+        }
+      },
+      "Price": {
+        "title": "Price",
+        "x-stoplight": {
+          "id": "nm1127vz0oyc4"
+        },
+        "type": "object",
+        "description": "Price descr",
+        "required": [
+          "id",
+          "baseAmount",
+          "startDate"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "a96nfi5qarete"
+            }
+          },
+          "baseAmount": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "6qoeq6ixclowb"
+            }
+          },
+          "startDate": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "133j1i9n0y8u8"
+            },
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "kir8k894ae8o9"
+            },
+            "format": "date-time"
+          },
+          "priceModifier": {
+            "x-stoplight": {
+              "id": "3xgj98dafabmq"
+            },
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/PriceModifier",
+              "x-stoplight": {
+                "id": "fewojyzrirk4e"
+              }
+            }
+          }
+        }
+      },
+      "PriceModifier": {
+        "title": "PriceModifier",
+        "x-stoplight": {
+          "id": "bpc652rnflz2t"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "tch63kjdufbkw"
+            }
+          },
+          "type": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "1rk8hzqitpr64"
+            },
+            "description": "Megmondja hogy idő vagy más alapú pl. level (amikor számolódik egy price) attól függően, hoyg a user-nek mi az aktuális level-je stb.\n"
+          },
+          "multiplicator": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "nq1nuhk7nwq0v"
+            },
+            "description": "Belongs to the price instance per user (variable by time or other factor)"
+          }
+        }
+      }
+    }
+  }
+}
