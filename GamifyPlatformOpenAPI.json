@@ -4,7 +4,7 @@
     "title": "Gamify Platform API",
     "version": "0.1",
     "summary": "Gamify Platform REST API",
-    "description": "Interface summary.\n\n GamifyPlatform Web Admin Console provides game registration for the game developers. During the registration process, an application ID and a service user is generated and binded to the game. The application ID is unique for each game and identified the game in the Gamify Platform. The service user provides access to game related management function.\n\n The following REST endpoints are organized into two categories:\n\n A) Administration endpoints provides user and/or game item management (accessible by using service user)\n\n B) User related (in game) endpoints provides user interactions (accessible by the actualy logged in user/player).\n\n Successfull login is required, in order to interact with any of the following API call. At login, the game client should provide the authentication credentials by utilizing HTTP Basic authentication scheme. The login response contains the authorization token which is used later on.\n\n There are two user types in the system:\n\n A) service user, which is directly binded to a game\n\n B) end user, who plays the game. The end users are registered to the Gamify Platform globally and belongs to one or more games.\n\n After login, all subsequent endpoints are secured by Bearer authentication (also called token authentication). Therefore, each request must send the authorization token (received at login) in the 'Authorization' HTTP header as a 'Bearer' value.\n
+    "description": "Interface summary.\n\n GamifyPlatform Web Admin Console provides game registration for the game developers. During the registration process, an application ID and a service user is generated and binded to the game. The application ID is unique for each game and identifies the game in the Gamify Platform. The service user provides access to game related management function.\n\n The following REST endpoints are organized into two categories:\n\n A) Administration endpoints provides user and/or game item management (accessible by using service user)\n\n B) User related (in game) endpoints provides user interactions (accessible by the actualy logged in user/player).\n\n Successfull login is required, in order to interact with any of the following API call. At login, the game client should provide the authentication credentials by utilizing HTTP Basic authentication scheme. The login response contains the authorization token which is used later on.\n\n There are two user types in the system:\n\n A) service user, which is directly binded to a game\n\n B) end user, who plays the game. The end users are registered to the Gamify Platform globally and belongs to one or more games.\n\n After login, all subsequent endpoints are secured by Bearer authentication (also called token authentication). Therefore, each request must send the authorization token (received at login) in the 'Authorization' HTTP header as a 'Bearer' value.\n
     ",
     "contact": {
       "email": "gamifyplatform02@gmail.com",
@@ -32,6 +32,10 @@
     {
       "name": "Wallet",
       "description": "Wallet related endpoints"
+    },
+    {
+      "name": "Admin",
+      "description": "Admin endpoints. Requires service user login/authorization token"
     }
   ],
   "servers": [
@@ -159,6 +163,7 @@
         }
       ],
       "patch": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "summary": "Update User Information",
         "operationId": "patch-user-id",
         "responses": {
@@ -232,7 +237,7 @@
         "description": "Create a new user.",
         "parameters": [],
         "tags": [
-          "User"
+          "User", "Admin"
         ]
       }
     },
@@ -633,7 +638,7 @@
         },
         "description": "Create/upload available items for a game which can be buyed or pledged later.",
         "tags": [
-          "Item"
+          "Item", "Admin"
         ]
       },
       "parameters": []
