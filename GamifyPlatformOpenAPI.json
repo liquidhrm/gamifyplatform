@@ -1,8 +1,5 @@
 {
   "openapi": "3.1.0",
-  "x-stoplight": {
-    "id": "7ptpy9gmg6r8a"
-  },
   "info": {
     "title": "Gamify Platform API",
     "version": "0.1",
@@ -67,9 +64,6 @@
           }
         },
         "operationId": "get-user-login",
-        "x-stoplight": {
-          "id": "ml6znbshazehd"
-        },
         "parameters": [
           {
             "schema": {
@@ -117,9 +111,6 @@
           "content": {},
           "description": ""
         },
-        "x-stoplight": {
-          "id": "rjbgd4c7m1evk"
-        },
         "parameters": [],
         "tags": [
           "User"
@@ -151,9 +142,6 @@
         },
         "operationId": "get-user-id",
         "description": "Retrieve the information of the user with the matching user ID.",
-        "x-stoplight": {
-          "id": "f05jtf2xautnr"
-        },
         "parameters": [],
         "tags": [
           "User"
@@ -202,9 +190,6 @@
           },
           "description": "User data to be updated."
         },
-        "x-stoplight": {
-          "id": "il3winzwqj1nk"
-        },
         "parameters": [],
         "tags": [
           "User"
@@ -245,9 +230,6 @@
           "description": "User data to be created"
         },
         "description": "Create a new user.",
-        "x-stoplight": {
-          "id": "ifsexh1fzpy4p"
-        },
         "parameters": [],
         "tags": [
           "User"
@@ -272,9 +254,6 @@
           }
         },
         "operationId": "get-user-logout",
-        "x-stoplight": {
-          "id": "ml6znbshazehd"
-        },
         "parameters": [
           {
             "schema": {
@@ -312,9 +291,6 @@
           }
         },
         "operationId": "get-wallet",
-        "x-stoplight": {
-          "id": "99m9xsx2r753a"
-        },
         "description": "Get wallet information like: free balance, pledged game/item details etc. Note: this response contains information only for the specific user and game (identified by the token).",
         "parameters": []
       },
@@ -344,9 +320,6 @@
           }
         },
         "operationId": "post-wallet-topup",
-        "x-stoplight": {
-          "id": "r1cj79qonxz4c"
-        },
         "description": "Topup money from credit card to the wallet, which is added to the wallet's free balance (money deposit)",
         "parameters": [],
         "requestBody": {
@@ -388,9 +361,6 @@
           }
         },
         "operationId": "post-wallet-redeem",
-        "x-stoplight": {
-          "id": "wk8zgv0gvc0we"
-        },
         "description": "Redeem money from the wallet free balance and transfer it to the credit card account (money withdrawal)",
         "parameters": [],
         "requestBody": {
@@ -431,9 +401,6 @@
           }
         },
         "operationId": "post-wallet-grant",
-        "x-stoplight": {
-          "id": "nw685ic9k535v"
-        },
         "description": "Money transfer to the wallet by a game, which is added to the wallet's free balance (money reward)",
         "parameters": [],
         "requestBody": {
@@ -475,9 +442,6 @@
           }
         },
         "operationId": "get-game-buy",
-        "x-stoplight": {
-          "id": "25554ai63e8n1"
-        },
         "parameters": [],
         "requestBody": {
           "content": {
@@ -529,9 +493,6 @@
           },
           "description": ""
         },
-        "x-stoplight": {
-          "id": "1t11pks61aso8"
-        },
         "description": "Buy or subscribe to a game for a specific period of time. Will be reserved from the wallet free account. Money will be freed again (and will be available) after the period is ended."
       },
       "parameters": []
@@ -565,10 +526,7 @@
           "content": {},
           "description": ""
         },
-        "description": "Break or release an earlier pledged game, before the pledge period is ended. Game's pledged amount will be freed up and transfered to the wallet free balance.",
-        "x-stoplight": {
-          "id": "3mfjb8odo4lfb"
-        }
+        "description": "Break or release an earlier pledged game, before the pledge period is ended. Game's pledged amount will be freed up and transfered to the wallet free balance."
       },
       "parameters": [
         {
@@ -636,10 +594,7 @@
         "description": "List of available or earlier buyed or pledged user's game items. See query params for filtering and pagination.",
         "tags": [
           "Item"
-        ],
-        "x-stoplight": {
-          "id": "li3bux04oq1t6"
-        }
+        ]
       },
       "parameters": []
     },
@@ -677,9 +632,6 @@
           "description": "Item data to be created"
         },
         "description": "Create/upload available items for a game which can be buyed or pledged later.",
-        "x-stoplight": {
-          "id": "i38hwrttejlxc"
-        },
         "tags": [
           "Item"
         ]
@@ -691,9 +643,6 @@
         "security": [ { "httpBearerAuthToken": [] } ],
         "description": "Buy an available item.",
         "summary": "Buy a game item",
-        "x-stoplight": {
-          "id": "rkpggc6bh4bru"
-        },
         "operationId": "get-game-items-buy",
         "parameters": [],
         "responses": {
@@ -754,9 +703,6 @@
         "tags": [
           "Item"
         ],
-        "x-stoplight": {
-          "id": "rf1qcmgdm1fd4"
-        },
         "requestBody": {
           "content": {
             "application/json": {
@@ -795,10 +741,7 @@
         },
         "tags": [
           "Item"
-        ],
-        "x-stoplight": {
-          "id": "rf1qcmgdm1fd4"
-        }
+        ]
       },
       "parameters": [
         {
@@ -814,8 +757,7 @@
     }
   },
   "components": {
-
-  "securitySchemes": {
+    "securitySchemes": {
       "httpBearerAuthToken": {
         "type": "http",
         "scheme": "bearer",
@@ -823,7 +765,6 @@
         "description": "User per game authorization token which grant permission to  API endpoints."
       }
     },
-  
     "schemas": {
       "User": {
         "title": "User",
@@ -839,9 +780,6 @@
             "signUpDate": "2019-08-24"
           }
         ],
-        "x-stoplight": {
-          "id": "fctrq23zbv0q3"
-        },
         "required": [
           "id",
           "firstName",
@@ -873,130 +811,73 @@
             "type": "string",
             "format": "date-time",
             "description": "The date that the user was created.",
-            "x-stoplight": {
-              "id": "zkjhb7ntzqaxy"
-            }
           },
           "updated": {
             "type": "string",
-            "x-stoplight": {
-              "id": "kg190fza4esuv"
-            },
             "format": "date-time"
           },
           "lastLogin": {
             "type": "string",
-            "x-stoplight": {
-              "id": "4ekxzya9pfi7c"
-            },
             "format": "date-time"
           },
           "authToken": {
             "type": "string",
-            "x-stoplight": {
-              "id": "nsp55z85ng2en"
-            },
             "description": "Generated authorization token. Also used in HTTP header to identify user for the given REST action."
           },
           "roles": {
             "type": "array",
-            "x-stoplight": {
-              "id": "3976sdp3pmsab"
-            },
             "description": "Auth roles like: admin, user etc.",
             "items": {
-              "x-stoplight": {
-                "id": "j2hpdgco792x6"
-              },
               "type": "string"
             }
           },
           "blocked": {
             "type": "boolean",
-            "x-stoplight": {
-              "id": "mvfqsit3og3bl"
-            },
             "description": "true if user login is blocked"
           }
         }
       },
       "Wallet": {
         "title": "Wallet",
-        "x-stoplight": {
-          "id": "3afobswj5d877"
-        },
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "5095qtfl4rtee"
-            }
+            "type": "string"
           },
           "freeBalance": {
-            "$ref": "#/components/schemas/Money",
-            "x-stoplight": {
-              "id": "nzeok5xo22qdd"
-            }
+            "$ref": "#/components/schemas/Money"
           },
           "pledgedGames": {
-            "x-stoplight": {
-              "id": "b4c2echxfd3kr"
-            },
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Game",
-              "x-stoplight": {
-                "id": "r99wyxaz237ft"
-              }
+              "$ref": "#/components/schemas/Game"
             }
           },
           "pledgedItems": {
             "type": "array",
-            "x-stoplight": {
-              "id": "glhrob8lu28jk"
-            },
             "items": {
-              "$ref": "#/components/schemas/Item",
-              "x-stoplight": {
-                "id": "vp0c7fmi8fflf"
-              }
+              "$ref": "#/components/schemas/Item"
             }
           }
         }
       },
       "Money": {
         "title": "Money",
-        "x-stoplight": {
-          "id": "zn4qz0eb4wfvx"
-        },
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "ifzf4hz3lj866"
-            }
+            "type": "string"
           },
           "amount": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "kjq4l632o0fr3"
-            }
+            "type": "string"
           },
           "currency": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "lcn6h1zdcj12f"
-            }
+            "type": "string"
           }
         }
       },
       "Game": {
         "title": "Game",
-        "x-stoplight": {
-          "id": "xwds5jnndqnxi"
-        },
         "type": "object",
         "required": [
           "id",
@@ -1004,36 +885,21 @@
         ],
         "properties": {
           "id": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "e3pvt1pyz2mex"
-            }
+            "type": "string"
           },
           "name": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "hy3it6nea7j0y"
-            }
+            "type": "string"
           },
           "description": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "zi8snbwcfigm9"
-            }
+            "type": "string"
           },
           "metaData": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "6475l7xrlmr3j"
-            }
+            "type": "string"
           }
         }
       },
       "GameBuy": {
         "title": "GameBuy",
-        "x-stoplight": {
-          "id": "efmxvrlepfnah"
-        },
         "type": "object",
         "properties": {
           "id": {
@@ -1058,9 +924,6 @@
       },
       "Item": {
         "title": "Item",
-        "x-stoplight": {
-          "id": "8ayjlglus3fcb"
-        },
         "type": "object",
         "required": [
           "id",
@@ -1071,58 +934,34 @@
         ],
         "properties": {
           "id": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "mgapj1wyj4fnx"
-            }
+            "type": "string"
           },
           "gameId": {
             "type": "string",
-            "x-stoplight": {
-              "id": "ofyqxxsvqw8qt"
-            },
             "description": "Game foreign key"
           },
           "name": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "0nqdrjodkjnxl"
-            }
+            "type": "string"
           },
           "description": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "vawx0quloybqm"
-            }
+            "type": "string"
           },
           "type": {
             "type": "string",
-            "x-stoplight": {
-              "id": "w8q0g6sxu8za8"
-            },
             "description": "Object, service, level etc."
           },
           "price": {
             "type": "object",
-            "$ref": "#/components/schemas/Price",
-            "x-stoplight": {
-              "id": "0amxayim1p3o9"
-            }
+            "$ref": "#/components/schemas/Price"
           },
           "metaData": {
             "type": "string",
-            "x-stoplight": {
-              "id": "qh0wtaf7p35c4"
-            },
             "description": "JSON"
           }
         }
       },
       "Items": {
         "title": "Items",
-        "x-stoplight": {
-          "id": "8ayjlglus3fcb"
-        },
         "type": "object",
         "required": [
           "maxCount",
@@ -1130,52 +969,31 @@
         ],
         "properties": {
           "maxCount": {
-            "type": "number",
-            "x-stoplight": {
-              "id": "mgapj1wyj4fnx"
-            }
+            "type": "number"
           },
           "items": {
-            "x-stoplight": {
-              "id": "3xgj98dafabmq"
-            },
             "type": "array",
             "items": {
               "type": "object",
-              "$ref": "#/components/schemas/Item",
-              "x-stoplight": {
-                "id": "fewojyzrirk4e"
-              }
+              "$ref": "#/components/schemas/Item"
             }
           }
         }
       },
       "ItemBuy": {
         "title": "ItemBuy",
-        "x-stoplight": {
-          "id": "ewdfhcoud5idz"
-        },
         "type": "object",
         "properties": {
           "itemId": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "qsoc196uiqld3"
-            }
+            "type": "string"
           },
           "amount": {
-            "$ref": "#/components/schemas/Money",
-            "x-stoplight": {
-              "id": "pjq888maat5l3"
-            }
+            "$ref": "#/components/schemas/Money"
           }
         }
       },
       "Price": {
         "title": "Price",
-        "x-stoplight": {
-          "id": "nm1127vz0oyc4"
-        },
         "type": "object",
         "description": "Price descr",
         "required": [
@@ -1185,71 +1003,41 @@
         ],
         "properties": {
           "id": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "a96nfi5qarete"
-            }
+            "type": "string"
           },
           "baseAmount": {
-            "type": "number",
-            "x-stoplight": {
-              "id": "6qoeq6ixclowb"
-            }
+            "type": "number"
           },
           "startDate": {
             "type": "string",
-            "x-stoplight": {
-              "id": "133j1i9n0y8u8"
-            },
             "format": "date-time"
           },
           "endDate": {
             "type": "string",
-            "x-stoplight": {
-              "id": "kir8k894ae8o9"
-            },
             "format": "date-time"
           },
           "priceModifier": {
-            "x-stoplight": {
-              "id": "3xgj98dafabmq"
-            },
             "type": "array",
             "items": {
               "type": "object",
-              "$ref": "#/components/schemas/PriceModifier",
-              "x-stoplight": {
-                "id": "fewojyzrirk4e"
-              }
+              "$ref": "#/components/schemas/PriceModifier"
             }
           }
         }
       },
       "PriceModifier": {
         "title": "PriceModifier",
-        "x-stoplight": {
-          "id": "bpc652rnflz2t"
-        },
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "tch63kjdufbkw"
-            }
+            "type": "string"
           },
           "type": {
             "type": "string",
-            "x-stoplight": {
-              "id": "1rk8hzqitpr64"
-            },
             "description": "Megmondja hogy idő vagy más alapú pl. level (amikor számolódik egy price) attól függően, hoyg a user-nek mi az aktuális level-je stb.\n"
           },
           "multiplicator": {
             "type": "number",
-            "x-stoplight": {
-              "id": "nq1nuhk7nwq0v"
-            },
             "description": "Belongs to the price instance per user (variable by time or other factor)"
           }
         }
