@@ -6,7 +6,7 @@
 
 GamifyPlatform Web Admin Console provides game registration for the game developers. During the registration process, an application ID and a service user is generated and binded to the game. The application ID is unique for each game and identified the game in the Gamify Platform. The service user provides access to game related management function.
 
-## Endpoints types
+## Endpoint types
 The following REST endpoints are organized into two categories:
 
 A) Administration endpoints provides user and/or game item management (accessible by using service user)
