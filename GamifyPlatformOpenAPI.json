@@ -6,8 +6,9 @@
   "info": {
     "title": "Gamify Platform API",
     "version": "0.1",
-    "summary": "Gamify Platform API definition",
-    "description": "Gamify Platform OpenAPI interface description.\n\n- Game is created/added to the platform manually through the amin web UI by the GamifyPlatform by game developer requests.\n- All game users and items are dinamically created/added by the game developer through this REST interface.\n\n- In order to interact with the API, login is required for a game through a technical user (which is associated to the game) and also for an end user.\n- All subsequent API interactions must send the provided auth-token in the HTTP header, received after succesfull login.\n",
+    "summary": "Gamify Platform REST API",
+    "description": "Interface summary.\n\n GamifyPlatform Web Admin Console provides game registration for the game developers. During the registration process, an application ID and a service user is generated and binded to the game. The application ID is unique for each game and identified the game in the Gamify Platform. The service user provides access to game related management function.\n\n The following REST endpoints are organized into two categories:\n\n A) Administration endpoints provides user and/or game item management (accessible by using service user)\n\n B) User related (in game) endpoints provides user interactions (accessible by the actualy logged in user/player).\n\n Successfull login is required, in order to interact with any of the following API call. At login, the game client should provide the authentication credentials by utilizing HTTP Basic authentication scheme. The login response contains the authorization token which is used later on.\n\n There are two user types in the system:\n\n A) service user, which is directly binded to a game\n\n B) end user, who plays the game. The end users are registered to the Gamify Platform globally and belongs to one or more games.\n\n After login, all subsequent endpoints are secured by Bearer authentication (also called token authentication). Therefore, each request must send the authorization token (received at login) in the 'Authorization' HTTP header as a 'Bearer' value.\n
+    ",
     "contact": {
       "email": "gamifyplatform02@gmail.com",
       "name": "Support Contact",
@@ -42,7 +43,7 @@
     }
   ],
   "paths": {
-    "/user/login": {
+    "/user/login/{appId}": {
       "get": {
         "summary": "Login user",
         "description": "Login user by basic auth method.",
@@ -62,7 +63,7 @@
             }
           },
           "400": {
-            "description": "Missing Required Information: HTTP Authorization header"
+            "description": "Missing or wrong HTTP Authorization header!"
           }
         },
         "operationId": "get-user-login",
@@ -70,6 +71,15 @@
           "id": "ml6znbshazehd"
         },
         "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "appId",
+            "in": "path",
+            "required": true,
+            "description": "Game ID"
+          },
           {
             "schema": {
               "type": "string"
@@ -83,8 +93,9 @@
     },
     "/user/whoami": {
       "get": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "summary": "Get user info by auth token",
-        "description": "Get authenticated (already logged in) user data by auth-token.",
+        "description": "Get authenticated (already logged in) user data by authorization token.",
         "operationId": "get-user-whoami",
         "responses": {
           "200": {
@@ -99,7 +110,7 @@
             }
           },
           "400": {
-            "description": "Missing Required Information: HTTP auth-token header"
+            "description": "Missing or wrong HTTP Authorization header!"
           }
         },
         "requestBody": {
@@ -109,16 +120,7 @@
         "x-stoplight": {
           "id": "rjbgd4c7m1evk"
         },
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "auth-token",
-            "description": "User auth-token which initiates the current action."
-          }
-        ],
+        "parameters": [],
         "tags": [
           "User"
         ]
@@ -126,6 +128,7 @@
     },
     "/user/{id}": {
       "get": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "summary": "Get User Info by User ID",
         "responses": {
           "200": {
@@ -139,6 +142,9 @@
               }
             }
           },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
+          },
           "404": {
             "description": "User Not Found"
           }
@@ -148,16 +154,7 @@
         "x-stoplight": {
           "id": "f05jtf2xautnr"
         },
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "auth-token",
-            "description": "User auth-token which initiates the current action."
-          }
-        ],
+        "parameters": [],
         "tags": [
           "User"
         ]
@@ -208,16 +205,7 @@
         "x-stoplight": {
           "id": "il3winzwqj1nk"
         },
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "description": "User auth-token which initiates the current action.",
-            "name": "auth-token"
-          }
-        ],
+        "parameters": [],
         "tags": [
           "User"
         ]
@@ -225,6 +213,7 @@
     },
     "/user": {
       "post": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "summary": "Create New User",
         "operationId": "post-user",
         "responses": {
@@ -240,7 +229,7 @@
             }
           },
           "400": {
-            "description": "Missing Required Information"
+            "description": "Missing or wrong HTTP Authorization header!"
           }
         },
         "requestBody": {
@@ -259,23 +248,49 @@
         "x-stoplight": {
           "id": "ifsexh1fzpy4p"
         },
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "auth-token",
-            "description": "User auth-token which initiates the current action."
-          }
-        ],
+        "parameters": [],
         "tags": [
           "User"
         ]
       }
     },
-    "/user/wallet": {
+    "/user/logout/{appId}": {
       "get": {
+        "security": [ { "httpBearerAuthToken": [] } ],
+        "summary": "Logout user",
+        "description": "Logout user and invalidate game session",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {}
+          },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
+          }
+        },
+        "operationId": "get-user-logout",
+        "x-stoplight": {
+          "id": "ml6znbshazehd"
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "appId",
+            "in": "path",
+            "required": true,
+            "description": "Game ID"
+          }
+        ]
+      }
+    },
+"/user/wallet": {
+      "get": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "summary": "Get wallet information",
         "tags": [
           "Wallet"
@@ -291,28 +306,23 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
           }
         },
         "operationId": "get-wallet",
         "x-stoplight": {
           "id": "99m9xsx2r753a"
         },
-        "description": "Get wallet information like: free balance, pledged game/item details etc.",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "auth-token",
-            "description": "User auth-token which initiates the current action."
-          }
-        ]
+        "description": "Get wallet information like: free balance, pledged game/item details etc. Note: this response contains information only for the specific user and game (identified by the token).",
+        "parameters": []
       },
       "parameters": []
     },
     "/user/wallet/topup": {
       "post": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "summary": "Topup money to wallet",
         "tags": [
           "Wallet"
@@ -328,6 +338,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
           }
         },
         "operationId": "post-wallet-topup",
@@ -335,16 +348,7 @@
           "id": "r1cj79qonxz4c"
         },
         "description": "Topup money from credit card to the wallet, which is added to the wallet's free balance (money deposit)",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "auth-token",
-            "description": "User auth-token which initiates the current action."
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -362,6 +366,7 @@
     },
     "/user/wallet/redeem": {
       "post": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "summary": "Redeem money from wallet",
         "tags": [
           "Wallet"
@@ -377,6 +382,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
           }
         },
         "operationId": "post-wallet-redeem",
@@ -384,16 +392,7 @@
           "id": "wk8zgv0gvc0we"
         },
         "description": "Redeem money from the wallet free balance and transfer it to the credit card account (money withdrawal)",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "auth-token",
-            "description": "User auth-token which initiates the current action."
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -410,6 +409,7 @@
     },
     "/user/wallet/reward": {
       "post": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "summary": "Money transfer to wallet",
         "tags": [
           "Wallet"
@@ -425,6 +425,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
           }
         },
         "operationId": "post-wallet-grant",
@@ -432,16 +435,7 @@
           "id": "nw685ic9k535v"
         },
         "description": "Money transfer to the wallet by a game, which is added to the wallet's free balance (money reward)",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "auth-token",
-            "description": "User auth-token which initiates the current action."
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "description": "Money to reward",
           "content": {
@@ -459,6 +453,7 @@
     },
     "/game/buy": {
       "post": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "summary": "Buy a game or subscribtion",
         "tags": [
           "Game"
@@ -474,22 +469,16 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
           }
         },
         "operationId": "get-game-buy",
         "x-stoplight": {
           "id": "25554ai63e8n1"
         },
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "auth-token",
-            "description": "User auth-token which initiates the current action."
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -506,6 +495,7 @@
     },
     "/game/pledge": {
       "post": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "summary": "Buy or subscribe a game for a specific period of time",
         "tags": [
           "Game"
@@ -521,19 +511,13 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
           }
         },
         "operationId": "get-game-pledge",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "auth-token",
-            "description": "User auth-token which initiates the current action."
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -554,6 +538,7 @@
     },
     "/game/release/{id}": {
       "get": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "summary": "Release an earlier pledged game",
         "tags": [
           "Game"
@@ -569,19 +554,13 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
           }
         },
         "operationId": "get-game-release",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "auth-token",
-            "description": "User auth-token which initiates the current action."
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {},
           "description": ""
@@ -605,6 +584,7 @@
     },
     "/game/items": {
       "get": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "summary": "Query game items",
         "responses": {
           "200": {
@@ -612,28 +592,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Item",
-                    "x-stoplight": {
-                      "id": "en8agtdld95mh"
-                    }
-                  }
+                  "type": "object",
+                   "$ref": "#/components/schemas/Items"
                 }
               }
             }
+          },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
           }
         },
         "operationId": "get-game-items",
         "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "auth-token",
-            "description": "User auth-token which initiates the current action."
-          },
           {
             "schema": {
               "type": "boolean"
@@ -641,13 +611,29 @@
             "in": "query",
             "name": "isOwned",
             "description": "If false than query items which are available to buy or pledge. In case of true, the query provides the user's bought or pledget items."
+          },
+          {
+            "schema": {
+              "type": "number"
+            },
+            "in": "query",
+            "name": "fromIndex",
+            "description": "Pagination start index"
+          },
+          {
+            "schema": {
+              "type": "number"
+            },
+            "in": "query",
+            "name": "pageLength",
+            "description": "Pagination start index"
           }
         ],
         "requestBody": {
           "content": {},
           "description": ""
         },
-        "description": "List of available or earlier buyed or pledged user's game items. See query params for filtering.",
+        "description": "List of available or earlier buyed or pledged user's game items. See query params for filtering and pagination.",
         "tags": [
           "Item"
         ],
@@ -659,6 +645,7 @@
     },
     "/game/item": {
       "post": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "summary": "Create game items",
         "responses": {
           "200": {
@@ -671,19 +658,13 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
           }
         },
         "operationId": "post-game-item",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "auth-token",
-            "description": "User auth-token which initiates the current action."
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -707,22 +688,14 @@
     },
     "/game/item/buy": {
       "post": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "description": "Buy an available item.",
         "summary": "Buy a game item",
         "x-stoplight": {
           "id": "rkpggc6bh4bru"
         },
         "operationId": "get-game-items-buy",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "auth-token",
-            "description": "User auth-token which initiates the current action."
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Actual wallet information",
@@ -734,6 +707,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
           }
         },
         "tags": [
@@ -754,19 +730,11 @@
     },
     "/game/item/pledge": {
       "post": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "description": "Buy or subscribe an available item for a certain period of time.",
         "summary": "Pledge a game item",
         "operationId": "get-game-items-pledge",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "auth-token",
-            "description": "User auth-token which initiates the current action."
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Actual wallet information",
@@ -778,6 +746,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
           }
         },
         "tags": [
@@ -801,19 +772,11 @@
     },
     "/game/item/release/{id}": {
       "get": {
+        "security": [ { "httpBearerAuthToken": [] } ],
         "description": "Break or release an earlier pledged item, before the pledge period is ended. Items's pledged amount will be freed up and transfered to the wallet free balance.",
         "summary": "Release a pledged game item",
         "operationId": "get-game-items-release",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "auth-token",
-            "description": "User auth-token which initiates the current action."
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Actual wallet information",
@@ -825,6 +788,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
           }
         },
         "tags": [
@@ -848,6 +814,16 @@
     }
   },
   "components": {
+
+  "securitySchemes": {
+      "httpBearerAuthToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "User per game authorization token which grant permission to  API endpoints."
+      }
+    },
+  
     "schemas": {
       "User": {
         "title": "User",
@@ -1054,7 +1030,7 @@
         }
       },
       "GameBuy": {
-        "title": "BuyGame",
+        "title": "GameBuy",
         "x-stoplight": {
           "id": "efmxvrlepfnah"
         },
@@ -1142,41 +1118,49 @@
           }
         }
       },
+      "Items": {
+        "title": "Items",
+        "x-stoplight": {
+          "id": "8ayjlglus3fcb"
+        },
+        "type": "object",
+        "required": [
+          "maxCount",
+          "items"
+        ],
+        "properties": {
+          "maxCount": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "mgapj1wyj4fnx"
+            }
+          },
+          "items": {
+            "x-stoplight": {
+              "id": "3xgj98dafabmq"
+            },
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/Item",
+              "x-stoplight": {
+                "id": "fewojyzrirk4e"
+              }
+            }
+          }
+        }
+      },
       "ItemBuy": {
-        "title": "BuyItem",
+        "title": "ItemBuy",
         "x-stoplight": {
           "id": "ewdfhcoud5idz"
         },
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "l6pbdl1sjitns"
-            }
-          },
           "itemId": {
             "type": "string",
             "x-stoplight": {
               "id": "qsoc196uiqld3"
-            }
-          },
-          "targetUserId": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "uzlx47d1us9rs"
-            }
-          },
-          "name": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "6jk21rwuljdfg"
-            }
-          },
-          "description": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "iy99h44k27cee"
             }
           },
           "amount": {
