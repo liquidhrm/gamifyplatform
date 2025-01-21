@@ -1,0 +1,702 @@
+{
+	"info": {
+		"_postman_id": "4fcd611f-36c4-4fdf-b42d-aee2be750c3c",
+		"name": "Gamify",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10041908"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();",
+							"pm.globals.set('accessToken', res.accessToken);",
+							"pm.globals.set('refreshToken', res.refreshToken);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "player",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "FBCQ8tnS",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://35.187.184.40:8090/gamify-store/user/login/:appCode",
+					"protocol": "http",
+					"host": [
+						"35",
+						"187",
+						"184",
+						"40"
+					],
+					"port": "8090",
+					"path": [
+						"gamify-store",
+						"user",
+						"login",
+						":appCode"
+					],
+					"variable": [
+						{
+							"key": "appCode",
+							"value": "GRB"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "refreshToken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();",
+							"pm.globals.set('accessToken', res.accessToken);",
+							"pm.globals.set('refreshToken', res.refreshToken);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://35.187.184.40:8090/gamify-store/user/login/refresh?refreshToken={{refreshToken}}",
+					"protocol": "http",
+					"host": [
+						"35",
+						"187",
+						"184",
+						"40"
+					],
+					"port": "8090",
+					"path": [
+						"gamify-store",
+						"user",
+						"login",
+						"refresh"
+					],
+					"query": [
+						{
+							"key": "refreshToken",
+							"value": "{{refreshToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "whoami",
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "EF2780278B45B95FBCD39DBF8C0301EC",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "XSRF-TOKEN",
+						"value": "20ba57c4-db77-4814-afba-f19dc037cb90",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://35.187.184.40:8090/gamify-store/user/whoami",
+					"protocol": "http",
+					"host": [
+						"35",
+						"187",
+						"184",
+						"40"
+					],
+					"port": "8090",
+					"path": [
+						"gamify-store",
+						"user",
+						"whoami"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "wallet",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "EF2780278B45B95FBCD39DBF8C0301EC",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "XSRF-TOKEN",
+						"value": "20ba57c4-db77-4814-afba-f19dc037cb90",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://35.187.184.40:8090/gamify-store/user/wallet",
+					"protocol": "http",
+					"host": [
+						"35",
+						"187",
+						"184",
+						"40"
+					],
+					"port": "8090",
+					"path": [
+						"gamify-store",
+						"user",
+						"wallet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "items",
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "EF2780278B45B95FBCD39DBF8C0301EC",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "XSRF-TOKEN",
+						"value": "20ba57c4-db77-4814-afba-f19dc037cb90",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://35.187.184.40:8090/gamify-store/game/items",
+					"protocol": "http",
+					"host": [
+						"35",
+						"187",
+						"184",
+						"40"
+					],
+					"port": "8090",
+					"path": [
+						"gamify-store",
+						"game",
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create item",
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "EF2780278B45B95FBCD39DBF8C0301EC",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "XSRF-TOKEN",
+						"value": "20ba57c4-db77-4814-afba-f19dc037cb90",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"item 2\",\n    \"type\": \"string\",\n    \"consumable\": false,\n    \"amount\": 50,\n    \"currency\": \"USD\",\n    \"metaData\": \"asdasd\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://35.187.184.40:8090/gamify-store/game/item",
+					"protocol": "http",
+					"host": [
+						"35",
+						"187",
+						"184",
+						"40"
+					],
+					"port": "8090",
+					"path": [
+						"gamify-store",
+						"game",
+						"item"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update item",
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "EF2780278B45B95FBCD39DBF8C0301EC",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "XSRF-TOKEN",
+						"value": "20ba57c4-db77-4814-afba-f19dc037cb90",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":1021,\n    \"name\": \"item 1\",\n    \"type\": \"string 123\",\n    \"consumable\": false,\n    \"amount\": 50,\n    \"currency\": \"USD\",\n    \"metaData\": \"asdasd\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://35.187.184.40:8090/gamify-store/game/item",
+					"protocol": "http",
+					"host": [
+						"35",
+						"187",
+						"184",
+						"40"
+					],
+					"port": "8090",
+					"path": [
+						"gamify-store",
+						"game",
+						"item"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "buy",
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "EF2780278B45B95FBCD39DBF8C0301EC",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "XSRF-TOKEN",
+						"value": "20ba57c4-db77-4814-afba-f19dc037cb90",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"itemId\": 1022,\n  \"count\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://35.187.184.40:8090/gamify-store/game/item/buy",
+					"protocol": "http",
+					"host": [
+						"35",
+						"187",
+						"184",
+						"40"
+					],
+					"port": "8090",
+					"path": [
+						"gamify-store",
+						"game",
+						"item",
+						"buy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pledge",
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "EF2780278B45B95FBCD39DBF8C0301EC",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "XSRF-TOKEN",
+						"value": "20ba57c4-db77-4814-afba-f19dc037cb90",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"itemId\": 1022,\n  \"count\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://35.187.184.40:8090/gamify-store/game/item/pledge",
+					"protocol": "http",
+					"host": [
+						"35",
+						"187",
+						"184",
+						"40"
+					],
+					"port": "8090",
+					"path": [
+						"gamify-store",
+						"game",
+						"item",
+						"pledge"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "topup",
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "EF2780278B45B95FBCD39DBF8C0301EC",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "XSRF-TOKEN",
+						"value": "20ba57c4-db77-4814-afba-f19dc037cb90",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": 1000,\n  \"currency\": \"USD\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://35.187.184.40:8090/gamify-store/user/wallet/topup",
+					"protocol": "http",
+					"host": [
+						"35",
+						"187",
+						"184",
+						"40"
+					],
+					"port": "8090",
+					"path": [
+						"gamify-store",
+						"user",
+						"wallet",
+						"topup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "redeem",
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "EF2780278B45B95FBCD39DBF8C0301EC",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "XSRF-TOKEN",
+						"value": "20ba57c4-db77-4814-afba-f19dc037cb90",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": 100,\n  \"currency\": \"USD\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://35.187.184.40:8090/gamify-store/user/wallet/redeem",
+					"protocol": "http",
+					"host": [
+						"35",
+						"187",
+						"184",
+						"40"
+					],
+					"port": "8090",
+					"path": [
+						"gamify-store",
+						"user",
+						"wallet",
+						"redeem"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reward",
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "EF2780278B45B95FBCD39DBF8C0301EC",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "XSRF-TOKEN",
+						"value": "20ba57c4-db77-4814-afba-f19dc037cb90",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": 100,\n  \"currency\": \"USD\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://35.187.184.40:8090/gamify-store/user/wallet/reward",
+					"protocol": "http",
+					"host": [
+						"35",
+						"187",
+						"184",
+						"40"
+					],
+					"port": "8090",
+					"path": [
+						"gamify-store",
+						"user",
+						"wallet",
+						"reward"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
