@@ -1,11 +1,9 @@
 {
-  "openapi": "3.1.0",
+  "openapi": "3.0.0",
   "info": {
-    "title": "Gamify Platform API",
+    "title": "Gamify Platform REST API",
     "version": "0.1",
-    "summary": "Gamify Platform REST API",
-    "description": "Interface summary.\n\n GamifyPlatform Web Admin Console provides game registration for the game developers. During the registration process, an application ID and a service user is generated and binded to the game. The application ID is unique for each game and identifies the game in the Gamify Platform. The service user provides access to game related management function.\n\n The following REST endpoints are organized into two categories:\n\n A) Administration endpoints provides user and/or game item management (accessible by using service user)\n\n B) User related (in game) endpoints provides user interactions (accessible by the actualy logged in user/player).\n\n Successfull login is required, in order to interact with any of the following API call. At login, the game client should provide the authentication credentials by utilizing HTTP Basic authentication scheme. The login response contains the authorization token which is used later on.\n\n There are two user types in the system:\n\n A) service user, which is directly binded to a game\n\n B) end user, who plays the game. The end users are registered to the Gamify Platform globally and belongs to one or more games.\n\n After login, all subsequent endpoints are secured by Bearer authentication (also called token authentication). Therefore, each request must send the authorization token (received at login) in the 'Authorization' HTTP header as a 'Bearer' value.\n
-    ",
+    "description": "Interface summary.\n\n GamifyPlatform Web Admin Console provides game registration for the game developers. During the registration process, an application ID and a service user is generated and binded to the game. The application ID is unique for each game and identifies the game in the Gamify Platform. The service user provides access to game related management function.\n\n The following REST endpoints are organized into two categories:\n\n A) Administration endpoints provides user and/or game item management (accessible by using service user)\n\n B) User related (in game) endpoints provides user interactions (accessible by the actualy logged in user/player).\n\n Successfull login is required, in order to interact with any of the following API call. At login, the game client should provide the authentication credentials by utilizing HTTP Basic authentication scheme. The login response contains the authorization token which is used later on.\n\n There are two user types in the system:\n\n A) service user, which is directly binded to a game\n\n B) end user, who plays the game. The end users are registered to the Gamify Platform globally and belongs to one or more games.\n\n After login, all subsequent endpoints are secured by Bearer authentication (also called token authentication). Therefore, each request must send the authorization token (received at login) in the 'Authorization' HTTP header as a 'Bearer' value.\n",
     "contact": {
       "email": "gamifyplatform02@gmail.com",
       "name": "Support Contact",
@@ -40,11 +38,11 @@
   ],
   "servers": [
     {
-      "url": "http://35.187.184.40:8080"
+      "url": "http://35.187.184.40:8090/gamify-store"
     }
   ],
   "paths": {
-    "/user/login/{appId}": {
+    "/user/login/{appCode}": {
       "get": {
         "summary": "Login user",
         "description": "Login user by basic auth method.",
@@ -58,7 +56,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/TokenResponse"
                 }
               }
             }
@@ -73,10 +71,10 @@
             "schema": {
               "type": "string"
             },
-            "name": "appId",
+            "name": "appCode",
             "in": "path",
             "required": true,
-            "description": "Game ID"
+            "description": "Game Code"
           },
           {
             "schema": {
@@ -89,9 +87,45 @@
         ]
       }
     },
+    "/user/login/refresh": {
+      "post": {
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
+        "summary": "Refresh user token",
+        "description": "Refresh user token",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
+          }
+        },
+        "operationId": "refresh_token",
+        "parameters": []
+      }
+    },
     "/user/whoami": {
       "get": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
         "summary": "Get user info by auth token",
         "description": "Get authenticated (already logged in) user data by authorization token.",
         "operationId": "get-user-whoami",
@@ -102,18 +136,13 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/User"
-                },
-                "examples": {}
+                }
               }
             }
           },
           "400": {
             "description": "Missing or wrong HTTP Authorization header!"
           }
-        },
-        "requestBody": {
-          "content": {},
-          "description": ""
         },
         "parameters": [],
         "tags": [
@@ -123,7 +152,11 @@
     },
     "/user/{id}": {
       "get": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
         "summary": "Get User Info by User ID",
         "responses": {
           "200": {
@@ -132,8 +165,7 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/User"
-                },
-                "examples": {}
+                }
               }
             }
           },
@@ -163,7 +195,11 @@
         }
       ],
       "patch": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
         "summary": "Update User Information",
         "operationId": "patch-user-id",
         "responses": {
@@ -173,8 +209,7 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/User"
-                },
-                "examples": {}
+                }
               }
             }
           },
@@ -189,8 +224,7 @@
               "schema": {
                 "type": "object",
                 "$ref": "#/components/schemas/User"
-              },
-              "examples": {}
+              }
             }
           },
           "description": "User data to be updated."
@@ -203,7 +237,11 @@
     },
     "/user": {
       "post": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
         "summary": "Create New User",
         "operationId": "post-user",
         "responses": {
@@ -213,8 +251,7 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/User"
-                },
-                "examples": {}
+                }
               }
             }
           },
@@ -228,8 +265,7 @@
               "schema": {
                 "type": "object",
                 "$ref": "#/components/schemas/User"
-              },
-              "examples": {}
+              }
             }
           },
           "description": "User data to be created"
@@ -237,44 +273,18 @@
         "description": "Create a new user.",
         "parameters": [],
         "tags": [
-          "User", "Admin"
+          "User",
+          "Admin"
         ]
       }
     },
-    "/user/logout/{appId}": {
+    "/user/wallet": {
       "get": {
-        "security": [ { "httpBearerAuthToken": [] } ],
-        "summary": "Logout user",
-        "description": "Logout user and invalidate game session",
-        "tags": [
-          "User"
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {}
-          },
-          "400": {
-            "description": "Missing or wrong HTTP Authorization header!"
-          }
-        },
-        "operationId": "get-user-logout",
-        "parameters": [
+        "security": [
           {
-            "schema": {
-              "type": "string"
-            },
-            "name": "appId",
-            "in": "path",
-            "required": true,
-            "description": "Game ID"
+            "httpBearerAuthToken": []
           }
-        ]
-      }
-    },
-"/user/wallet": {
-      "get": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        ],
         "summary": "Get wallet information",
         "tags": [
           "Wallet"
@@ -303,7 +313,11 @@
     },
     "/user/wallet/topup": {
       "post": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
         "summary": "Topup money to wallet",
         "tags": [
           "Wallet"
@@ -332,7 +346,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "$ref": "#/components/schemas/Money"
+                "$ref": "#/components/schemas/MoneyItem"
               }
             }
           },
@@ -344,7 +358,11 @@
     },
     "/user/wallet/redeem": {
       "post": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
         "summary": "Redeem money from wallet",
         "tags": [
           "Wallet"
@@ -373,7 +391,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "$ref": "#/components/schemas/Money"
+                "$ref": "#/components/schemas/MoneyItem"
               }
             }
           },
@@ -384,7 +402,11 @@
     },
     "/user/wallet/reward": {
       "post": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
         "summary": "Money transfer to wallet",
         "tags": [
           "Wallet"
@@ -414,7 +436,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "$ref": "#/components/schemas/Money"
+                "$ref": "#/components/schemas/MoneyItem"
               }
             }
           }
@@ -425,7 +447,11 @@
     },
     "/game/buy": {
       "post": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
         "summary": "Buy a game or subscribtion",
         "tags": [
           "Game"
@@ -464,7 +490,11 @@
     },
     "/game/pledge": {
       "post": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
         "summary": "Buy or subscribe a game for a specific period of time",
         "tags": [
           "Game"
@@ -504,7 +534,11 @@
     },
     "/game/release/{id}": {
       "get": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
         "summary": "Release an earlier pledged game",
         "tags": [
           "Game"
@@ -527,10 +561,6 @@
         },
         "operationId": "get-game-release",
         "parameters": [],
-        "requestBody": {
-          "content": {},
-          "description": ""
-        },
         "description": "Break or release an earlier pledged game, before the pledge period is ended. Game's pledged amount will be freed up and transfered to the wallet free balance."
       },
       "parameters": [
@@ -547,7 +577,11 @@
     },
     "/game/items": {
       "get": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
         "summary": "Query game items",
         "responses": {
           "200": {
@@ -556,7 +590,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                   "$ref": "#/components/schemas/Items"
+                  "$ref": "#/components/schemas/Items"
                 }
               }
             }
@@ -566,36 +600,7 @@
           }
         },
         "operationId": "get-game-items",
-        "parameters": [
-          {
-            "schema": {
-              "type": "boolean"
-            },
-            "in": "query",
-            "name": "isOwned",
-            "description": "If false than query items which are available to buy or pledge. In case of true, the query provides the user's bought or pledget items."
-          },
-          {
-            "schema": {
-              "type": "number"
-            },
-            "in": "query",
-            "name": "fromIndex",
-            "description": "Pagination start index"
-          },
-          {
-            "schema": {
-              "type": "number"
-            },
-            "in": "query",
-            "name": "pageLength",
-            "description": "Pagination start index"
-          }
-        ],
-        "requestBody": {
-          "content": {},
-          "description": ""
-        },
+        "parameters": [],
         "description": "List of available or earlier buyed or pledged user's game items. See query params for filtering and pagination.",
         "tags": [
           "Item"
@@ -605,7 +610,11 @@
     },
     "/game/item": {
       "post": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
         "summary": "Create game items",
         "responses": {
           "200": {
@@ -638,14 +647,19 @@
         },
         "description": "Create/upload available items for a game which can be buyed or pledged later.",
         "tags": [
-          "Item", "Admin"
+          "Item",
+          "Admin"
         ]
       },
       "parameters": []
     },
     "/game/item/buy": {
       "post": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
         "description": "Buy an available item.",
         "summary": "Buy a game item",
         "operationId": "get-game-items-buy",
@@ -674,7 +688,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "$ref": "#/components/schemas/ItemBuy"
+                "$ref": "#/components/schemas/BuyItem"
               }
             }
           }
@@ -684,7 +698,11 @@
     },
     "/game/item/pledge": {
       "post": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
         "description": "Buy or subscribe an available item for a certain period of time.",
         "summary": "Pledge a game item",
         "operationId": "get-game-items-pledge",
@@ -713,7 +731,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "$ref": "#/components/schemas/ItemBuy"
+                "$ref": "#/components/schemas/BuyItem"
               }
             }
           }
@@ -723,7 +741,11 @@
     },
     "/game/item/release/{id}": {
       "get": {
-        "security": [ { "httpBearerAuthToken": [] } ],
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
         "description": "Break or release an earlier pledged item, before the pledge period is ended. Items's pledged amount will be freed up and transfered to the wallet free balance.",
         "summary": "Release a pledged game item",
         "operationId": "get-game-items-release",
@@ -774,17 +796,6 @@
       "User": {
         "title": "User",
         "type": "object",
-        "examples": [
-          {
-            "id": 142,
-            "firstName": "Alice",
-            "lastName": "Smith",
-            "email": "alice.smith@gmail.com",
-            "dateOfBirth": "1997-10-31",
-            "emailVerified": true,
-            "signUpDate": "2019-08-24"
-          }
-        ],
         "required": [
           "id",
           "firstName",
@@ -798,6 +809,9 @@
             "type": "string",
             "description": "Unique identifier for the given user."
           },
+          "username": {
+            "type": "string"
+          },
           "firstName": {
             "type": "string"
           },
@@ -808,10 +822,6 @@
             "type": "string",
             "format": "email"
           },
-          "emailVerified": {
-            "type": "boolean",
-            "description": "Set to true if the user's email has been verified."
-          },
           "created": {
             "type": "string",
             "format": "date-time",
@@ -821,24 +831,29 @@
             "type": "string",
             "format": "date-time"
           },
-          "lastLogin": {
+          "lastLoginDate": {
             "type": "string",
             "format": "date-time"
           },
-          "authToken": {
-            "type": "string",
-            "description": "Generated authorization token. Also used in HTTP header to identify user for the given REST action."
-          },
-          "roles": {
+          "authorities": {
             "type": "array",
             "description": "Auth roles like: admin, user etc.",
             "items": {
-              "type": "string"
+              "type": "object",
+              "properties": {
+                "authority": {
+                  "type": "string"
+                }
+              }
             }
           },
-          "blocked": {
+          "active": {
             "type": "boolean",
-            "description": "true if user login is blocked"
+            "description": "false if user login is blocked"
+          },
+          "lang": {
+            "type": "string",
+            "description": "language"
           }
         }
       },
@@ -850,7 +865,10 @@
             "type": "string"
           },
           "freeBalance": {
-            "$ref": "#/components/schemas/Money"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MoneyItem"
+            }
           },
           "pledgedGames": {
             "type": "array",
@@ -866,21 +884,6 @@
           }
         }
       },
-      "Money": {
-        "title": "Money",
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "amount": {
-            "type": "string"
-          },
-          "currency": {
-            "type": "string"
-          }
-        }
-      },
       "Game": {
         "title": "Game",
         "type": "object",
@@ -892,10 +895,13 @@
           "id": {
             "type": "string"
           },
+          "code": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
           },
-          "description": {
+          "developer": {
             "type": "string"
           },
           "metaData": {
@@ -907,22 +913,13 @@
         "title": "GameBuy",
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
           "gameId": {
             "type": "string"
           },
-          "targetUserId": {
-            "type": "string"
-          },
           "amount": {
-            "$ref": "#/components/schemas/Money"
+            "type": "number"
           },
-          "name": {
-            "type": "string"
-          },
-          "description": {
+          "currency": {
             "type": "string"
           }
         }
@@ -932,16 +929,18 @@
         "type": "object",
         "required": [
           "id",
-          "gameId",
+          "applicationId",
           "name",
           "type",
-          "price"
+          "amount",
+          "currency",
+          "consumable"
         ],
         "properties": {
           "id": {
             "type": "string"
           },
-          "gameId": {
+          "applicationId": {
             "type": "string",
             "description": "Game foreign key"
           },
@@ -955,9 +954,17 @@
             "type": "string",
             "description": "Object, service, level etc."
           },
-          "price": {
-            "type": "object",
-            "$ref": "#/components/schemas/Price"
+          "amount": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "consumable": {
+            "type": "boolean"
+          },
+          "count": {
+            "type": "number"
           },
           "metaData": {
             "type": "string",
@@ -969,13 +976,9 @@
         "title": "Items",
         "type": "object",
         "required": [
-          "maxCount",
           "items"
         ],
         "properties": {
-          "maxCount": {
-            "type": "number"
-          },
           "items": {
             "type": "array",
             "items": {
@@ -985,65 +988,42 @@
           }
         }
       },
-      "ItemBuy": {
-        "title": "ItemBuy",
+      "BuyItem": {
+        "title": "BuyItem",
         "type": "object",
         "properties": {
           "itemId": {
             "type": "string"
           },
-          "amount": {
-            "$ref": "#/components/schemas/Money"
+          "count": {
+            "type": "number"
           }
         }
       },
-      "Price": {
-        "title": "Price",
+      "MoneyItem": {
+        "title": "MoneyItem",
         "type": "object",
-        "description": "Price descr",
-        "required": [
-          "id",
-          "baseAmount",
-          "startDate"
-        ],
         "properties": {
-          "id": {
+          "amount": {
             "type": "string"
           },
-          "baseAmount": {
+          "currency": {
+            "type": "string"
+          }
+        }
+      },
+      "TokenResponse": {
+        "title": "TokenResponse",
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "expiration": {
             "type": "number"
           },
-          "startDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "priceModifier": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "$ref": "#/components/schemas/PriceModifier"
-            }
-          }
-        }
-      },
-      "PriceModifier": {
-        "title": "PriceModifier",
-        "type": "object",
-        "properties": {
-          "id": {
+          "refreshToken": {
             "type": "string"
-          },
-          "type": {
-            "type": "string",
-            "description": "Megmondja hogy idő vagy más alapú pl. level (amikor számolódik egy price) attól függően, hoyg a user-nek mi az aktuális level-je stb.\n"
-          },
-          "multiplicator": {
-            "type": "number",
-            "description": "Belongs to the price instance per user (variable by time or other factor)"
           }
         }
       }
