@@ -615,7 +615,7 @@
             "httpBearerAuthToken": []
           }
         ],
-        "summary": "Create game items",
+        "summary": "Create game item",
         "responses": {
           "200": {
             "description": "Created item",
@@ -651,7 +651,48 @@
           "Admin"
         ]
       },
-      "parameters": []
+      "put": {
+        "security": [
+          {
+            "httpBearerAuthToken": []
+          }
+        ],
+        "summary": "Update game item",
+        "responses": {
+          "200": {
+            "description": "Updated item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Item"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or wrong HTTP Authorization header!"
+          }
+        },
+        "operationId": "put-game-item",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/Item"
+              }
+            }
+          },
+          "description": "Item data to be updated"
+        },
+        "description": "Update available items for a game which can be buyed or pledged later.",
+        "tags": [
+          "Item",
+          "Admin"
+        ]
+      }
     },
     "/game/item/buy": {
       "post": {
