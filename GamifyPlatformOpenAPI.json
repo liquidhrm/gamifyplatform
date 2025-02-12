@@ -600,7 +600,32 @@
           }
         },
         "operationId": "get-game-items",
-        "parameters": [],
+        "parameters": [
+          {
+            "schema": {
+              "type": "boolean"
+            },
+            "in": "query",
+            "name": "isOwned",
+            "description": "If false than query items which are available to buy or pledge. In case of true, the query provides the user's bought or pledget items."
+          },
+          {
+            "schema": {
+              "type": "number"
+            },
+            "in": "query",
+            "name": "fromIndex",
+            "description": "Pagination start index"
+          },
+          {
+            "schema": {
+              "type": "number"
+            },
+            "in": "query",
+            "name": "pageLength",
+            "description": "Pagination start index"
+          }
+        ],
         "description": "List of available or earlier buyed or pledged user's game items. See query params for filtering and pagination.",
         "tags": [
           "Item"
